@@ -164,7 +164,7 @@ async function init() {
     document.getElementById('status').textContent = "Aucune donnée disponible pour le moment.";
     return;
   }
-  const dates = RAW.map(r => r[0]).sort();
+  const dates = RAW.map(r => r[0]).filter(Boolean).sort();
   MIN_DATE = dates[0]; MAX_DATE = dates[dates.length - 1];
   dateDebut = isoDaysAgo(MAX_DATE, 6);
   dateFin = MAX_DATE;
@@ -206,7 +206,7 @@ function setActivePreset() {
 }
 
 function render() {
-  const periodRows = RAW.filter(r => r[0] >= dateDebut && r[0] <= dateFin);
+  const periodRows = RAW.filter(r => r[0] && r[0] >= dateDebut && r[0] <= dateFin);
   const labelPeriode = `${fmtDate(dateDebut)} au ${fmtDate(dateFin)}`;
 
   document.getElementById('kpi-periode').textContent = periodRows.length.toLocaleString('fr-FR');

@@ -1,0 +1,38 @@
+name: Actualisation quotidienne du dashboard SBC
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.3.2'
+
+      - name: Installer les packages R
+        run: |
+          Rscript -e 'install.packages(c("httr2","jsonlite","tibble","dplyr","tidyr","purrr","stringr","janitor"))'
+
+      - name: Extraire les donnees DHIS2 et generer le JSON du dashboard
+        env:
+          DHIS_BASE_URL: https://dhis-minsante-cm.org/
+          DHIS_USER: ${{ secrets.DHIS_USER }}
+          DHIS_PASS: ${{ secrets.DHIS_PASS }}
+        run: Rscript scripts/export_dashboard.R
+
+      - name: Publier les donnees mises a jour
+        run: |
+          git config user.name "dashboard-bot"
+          git config user.email "dashboard-bot@users.noreply.github.com"
+          git add docs/data/signals.json
+          git diff --quiet --cached || git commit -m "Actualisation automatique des donnees ($(date -u +%Y-%m-%d))"
+          git push

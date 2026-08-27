@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <div class="kpi-row-title" id="kpi-periode-title-cumul">Depuis le début de l'année (cumul)</div>
+    <div class="kpi-row-title" id="kpi-periode-title-cumul">Depuis le début de l'année (cumul, non filtré)</div>
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-bar" style="background:#1B7339;"></div>
         <div class="kpi-num" style="color:#1B7339;" id="kpiC-total">-</div>
@@ -131,6 +131,16 @@
       <div class="card-sub" id="table2-sub"></div>
       <table id="table-events"></table>
       <div class="foot-note">Classement : champ "événement retenu" (code officiel) puis type de signal (hors codes de canal SH*/SC*), sinon "Autres / inclassifiables".</div>
+    </div>
+
+    <div class="card table-card">
+      <div class="card-title">Performance de la surveillance — délais de traitement par région</div>
+      <div class="card-sub" id="table-delais-sub"></div>
+      <table id="table-delais"></table>
+      <div class="foot-note">
+        "Vérifié dans les 24h" / "investigué dans les 48h" : signaux au code HASVC, vérifiés le jour même ou le lendemain de la notification (les dates sources ne comportent pas d'heure).
+        "Transformé en évènement" : signal dont les informations rapportées correspondent, vérifié dans les 48h. "Évaluation de risque" : parmi les signaux transformés, ceux au code HDREC.
+      </div>
     </div>
 
   </div>
@@ -296,7 +306,7 @@ function render() {
   const periodRows = RAW.filter(r => r[0] && r[0] >= dateDebut && r[0] <= dateFin);
   const labelPeriode = `${fmtDate(dateDebut)} au ${fmtDate(dateFin)}`;
 
-  renderKpis('kpiC', RAW, `Depuis le début de l'année ${MAX_DATE.slice(0,4)} (cumul)`, 'kpi-periode-title-cumul');
+  renderKpis('kpiC', RAW, `Depuis le début de l'année ${MAX_DATE.slice(0,4)} (cumul, non filtré)`, 'kpi-periode-title-cumul');
   renderKpis('kpiP', periodRows, `Sur la période sélectionnée : ${labelPeriode}`, 'kpi-periode-title');
 
   document.getElementById('chart1-sub').textContent = labelPeriode;
@@ -306,6 +316,7 @@ function render() {
   renderChartDistricts(periodRows);
   renderChartType(periodRows);
   renderTableEvents(periodRows, labelPeriode);
+  renderTableDelais(periodRows, labelPeriode);
 }
 
 function renderKpis(prefix, rows, titleText, titleElId) {
@@ -468,6 +479,114 @@ function renderTableEvents(periodRows, labelPeriode) {
     <td style="text-align:center;">${classesCumul.length} (100%)</td>
   </tr></tbody>`;
   document.getElementById('table-events').innerHTML = html;
+}
+
+// ------------------------------------------------------------
+// TABLEAU DE PERFORMANCE / DÉLAIS DE TRAITEMENT
+// Reproduit fidèlement le script R (base_periode -> tableau_final).
+// row[9]=created, row[10]=verif_dt, row[11]=code_eval, row[12]=correspond
+// ------------------------------------------------------------
+
+function parseCorrespond(v) {
+  if (typeof v === 'boolean') return v;
+  const c = (v || '').toString().trim().toLowerCase();
+  if (['true', '1', 'vrai', 'oui'].includes(c)) return true;
+  if (['false', '0', 'faux', 'non'].includes(c)) return false;
+  return null;
+}
+
+function diffHeures(dateA, dateB) {
+  if (!dateA || !dateB || isNaN(dateA) || isNaN(dateB)) return null;
+  return (dateA - dateB) / 36e5; // millisecondes -> heures
+}
+
+function calculerIndicateurs(row) {
+  const notifDt = row[0] ? new Date(row[0] + 'T00:00:00') : null;
+  const createdDt = row[9] ? new Date(row[9]) : null;
+  const verifDt = row[10] ? new Date(row[10] + 'T00:00:00') : null;
+  const codeVerif = (row[7] || '').trim().toUpperCase();
+  const codeEval = (row[11] || '').trim().toUpperCase();
+  const correspond = parseCorrespond(row[12]);
+
+  const deltaNotifH = createdDt && notifDt ? Math.abs(diffHeures(createdDt, notifDt)) : null;
+  const notifie24h = deltaNotifH !== null && deltaNotifH <= 24;
+
+  const deltaVerifH = diffHeures(verifDt, notifDt);
+  const verifie24h = codeVerif === 'HASVC' && deltaVerifH !== null && deltaVerifH >= 0 && deltaVerifH <= 24;
+
+  const investigue48h = verifie24h; // même résultat, sur instruction explicite
+
+  const transforme48h = correspond === true && deltaVerifH !== null && deltaVerifH >= 0 && deltaVerifH <= 48;
+
+  const evaluationRisque = transforme48h && codeEval === 'HDREC';
+
+  return { notifie24h, verifie24h, investigue48h, transforme48h, evaluationRisque };
+}
+
+function renderTableDelais(periodRows, labelPeriode) {
+  const parRegion = {};
+  periodRows.forEach(r => {
+    const region = (r[2] || '').trim();
+    if (!region) return;
+    if (!parRegion[region]) parRegion[region] = {
+      signaux: 0, notifies24h: 0, verifies24h: 0, investigues48h: 0, transformes48h: 0, evalues: 0,
+    };
+    const ind = calculerIndicateurs(r);
+    const s = parRegion[region];
+    s.signaux++;
+    if (ind.notifie24h) s.notifies24h++;
+    if (ind.verifie24h) s.verifies24h++;
+    if (ind.investigue48h) s.investigues48h++;
+    if (ind.transforme48h) s.transformes48h++;
+    if (ind.evaluationRisque) s.evalues++;
+  });
+
+  const regions = Object.keys(parRegion).sort();
+  const total = { signaux: 0, notifies24h: 0, verifies24h: 0, investigues48h: 0, transformes48h: 0, evalues: 0 };
+  regions.forEach(r => {
+    const s = parRegion[r];
+    total.signaux += s.signaux; total.notifies24h += s.notifies24h; total.verifies24h += s.verifies24h;
+    total.investigues48h += s.investigues48h; total.transformes48h += s.transformes48h; total.evalues += s.evalues;
+  });
+
+  const pct = (n, d) => d > 0 ? Math.round(100 * n / d) : 0;
+  const cell = (n, d) => `${n} (${pct(n, d)} %)`;
+
+  let html = `<thead><tr>
+    <th style="background:#22A94B;text-align:left;">Région</th>
+    <th style="background:#22A94B;text-align:center;">Nombre de signaux notifiés</th>
+    <th style="background:#22A94B;text-align:center;">Nombre de signaux notifiés dans les 24h</th>
+    <th style="background:#22A94B;text-align:center;">% de signaux vérifiés dans les 24h</th>
+    <th style="background:#22A94B;text-align:center;">% de signaux investigués dans les 48h</th>
+    <th style="background:#22A94B;text-align:center;">% de signaux transformés en évènements dans les 48h</th>
+    <th style="background:#22A94B;text-align:center;">% d'évènements ayant bénéficié d'une évaluation de risque</th>
+  </tr></thead><tbody>`;
+
+  regions.forEach((r, i) => {
+    const s = parRegion[r];
+    html += `<tr style="background:${i % 2 === 0 ? '#FAFAF8' : '#fff'};">
+      <td>${r}</td>
+      <td style="text-align:center;">${s.signaux}</td>
+      <td style="text-align:center;">${s.notifies24h}</td>
+      <td style="text-align:center;">${cell(s.verifies24h, s.signaux)}</td>
+      <td style="text-align:center;">${cell(s.investigues48h, s.signaux)}</td>
+      <td style="text-align:center;">${cell(s.transformes48h, s.signaux)}</td>
+      <td style="text-align:center;">${cell(s.evalues, s.transformes48h)}</td>
+    </tr>`;
+  });
+
+  html += `<tr style="font-weight:700;">
+    <td>Total</td>
+    <td style="text-align:center;">${total.signaux}</td>
+    <td style="text-align:center;">${total.notifies24h}</td>
+    <td style="text-align:center;">${cell(total.verifies24h, total.signaux)}</td>
+    <td style="text-align:center;">${cell(total.investigues48h, total.signaux)}</td>
+    <td style="text-align:center;">${cell(total.transformes48h, total.signaux)}</td>
+    <td style="text-align:center;">${cell(total.evalues, total.transformes48h)}</td>
+  </tr></tbody>`;
+
+  document.getElementById('table-delais').innerHTML = html;
+  document.getElementById('table-delais-sub').textContent = labelPeriode;
 }
 
 init();

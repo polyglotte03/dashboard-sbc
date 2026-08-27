@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <div class="kpi-row-title" id="kpi-periode-title-cumul">Depuis le début de l'année (cumul, non filtré)</div>
+    <div class="kpi-row-title" id="kpi-periode-title-cumul">Depuis le début de l'année (cumul)</div>
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-bar" style="background:#1B7339;"></div>
         <div class="kpi-num" style="color:#1B7339;" id="kpiC-total">-</div>
@@ -296,7 +296,7 @@ function render() {
   const periodRows = RAW.filter(r => r[0] && r[0] >= dateDebut && r[0] <= dateFin);
   const labelPeriode = `${fmtDate(dateDebut)} au ${fmtDate(dateFin)}`;
 
-  renderKpis('kpiC', RAW, `Depuis le début de l'année ${MAX_DATE.slice(0,4)} (cumul, non filtré)`, 'kpi-periode-title-cumul');
+  renderKpis('kpiC', RAW, `Depuis le début de l'année ${MAX_DATE.slice(0,4)} (cumul)`, 'kpi-periode-title-cumul');
   renderKpis('kpiP', periodRows, `Sur la période sélectionnée : ${labelPeriode}`, 'kpi-periode-title');
 
   document.getElementById('chart1-sub').textContent = labelPeriode;

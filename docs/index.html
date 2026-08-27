@@ -210,7 +210,21 @@ function classifierVectorise(commentaire) {
 
 const MOIS_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 function fmtDate(d) { const [y,m,day] = d.split('-').map(Number); return `${day} ${MOIS_FR[m-1]} ${y}`; }
-function isoDaysAgo(dateStr, days) { const d = new Date(dateStr+'T00:00:00'); d.setDate(d.getDate()-days); return d.toISOString().slice(0,10); }
+function isoDaysAgo(dateStr, days) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() - days);
+  return toISO(d);
+}
+// Formate une Date en "AAAA-MM-JJ" à partir de ses composants LOCAUX
+// (toISOString() convertit en UTC et peut décaler d'un jour selon le
+// fuseau horaire du navigateur — on l'évite volontairement ici).
+function toISO(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+function todayISO() { return toISO(new Date()); }
 
 function typeSignal(sbcType) {
   const t = (sbcType || '').trim().toUpperCase();
@@ -245,7 +259,7 @@ function evenementFinal(row) {
 }
 
 let RAW = [];
-let MIN_DATE, MAX_DATE;
+let MIN_DATE, MAX_DATE, TODAY;
 let dateDebut, dateFin, preset = '7j';
 let chartDistricts, chartType;
 
@@ -263,13 +277,14 @@ async function init() {
   }
   const dates = RAW.map(r => r[0]).filter(Boolean).sort();
   MIN_DATE = dates[0]; MAX_DATE = dates[dates.length - 1];
-  dateDebut = isoDaysAgo(MAX_DATE, 6);
-  dateFin = MAX_DATE;
+  TODAY = todayISO();
+  dateDebut = isoDaysAgo(TODAY, 6);
+  dateFin = TODAY;
 
   document.getElementById('date-debut').value = dateDebut;
   document.getElementById('date-fin').value = dateFin;
   document.getElementById('date-debut').min = MIN_DATE;
-  document.getElementById('date-fin').max = MAX_DATE;
+  document.getElementById('date-fin').max = TODAY;
   document.getElementById('header-sub').textContent =
     `${RAW.length.toLocaleString('fr-FR')} signaux au total · du ${fmtDate(MIN_DATE)} au ${fmtDate(MAX_DATE)}`;
 
@@ -287,9 +302,9 @@ async function init() {
 
 function applyPreset(p) {
   preset = p;
-  if (p === '7j') { dateDebut = isoDaysAgo(MAX_DATE, 6); dateFin = MAX_DATE; }
-  else if (p === '30j') { dateDebut = isoDaysAgo(MAX_DATE, 29); dateFin = MAX_DATE; }
-  else if (p === 'cumul') { dateDebut = MIN_DATE; dateFin = MAX_DATE; }
+  if (p === '7j') { dateDebut = isoDaysAgo(TODAY, 6); dateFin = TODAY; }
+  else if (p === '30j') { dateDebut = isoDaysAgo(TODAY, 29); dateFin = TODAY; }
+  else if (p === 'cumul') { dateDebut = MIN_DATE; dateFin = TODAY; }
   document.getElementById('date-debut').value = dateDebut;
   document.getElementById('date-fin').value = dateFin;
   setActivePreset();

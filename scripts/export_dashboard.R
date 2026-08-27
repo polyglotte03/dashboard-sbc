@@ -358,6 +358,10 @@ cat("\nPipeline termine. df_geo :", nrow(df_geo), "lignes,", ncol(df_geo), "colo
 #   [8] sbc_code_d_acces_au_tirage_et_verification
 #   [9] sbc_commentaires (texte libre, pour la classification niveau 1
 #       cote dashboard - cf. classifier_vectorise dans le pipeline R)
+#   [10] created (horodatage brut DHIS2, ex. "2026-08-19T14:32:00.000")
+#   [11] sbc_date_de_verification_du_signal_cas (DATE simple, pas d'heure)
+#   [12] sbc_code_d_acces_evaluation_et_risques
+#   [13] sbc_les_informations_rapportees_correspondent (booleen/texte brut)
 # ============================================================
 
 library(jsonlite)
@@ -374,7 +378,11 @@ df_export <- df_geo %>%
     sbc_type = sbc_type,
     sbc_nom_de_l_evenement_retenu = sbc_nom_de_l_evenement_retenu,
     sbc_code_d_acces_au_tirage_et_verification = sbc_code_d_acces_au_tirage_et_verification,
-    sbc_commentaires = sbc_commentaires
+    sbc_commentaires = sbc_commentaires,
+    created = as.character(created),
+    sbc_date_de_verification_du_signal_cas = as.character(sbc_date_de_verification_du_signal_cas),
+    sbc_code_d_acces_evaluation_et_risques = sbc_code_d_acces_evaluation_et_risques,
+    sbc_les_informations_rapportees_correspondent = as.character(sbc_les_informations_rapportees_correspondent)
   )
 
 write(

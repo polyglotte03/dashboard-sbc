@@ -119,12 +119,13 @@ const REGION_COLOR = {
 };
 
 const DICO_EVENEMENTS = {
-  DAA: 'Diarrhée aqueuse aiguë', DRA: 'Maladie du ver de Guinée (dracunculose)',
+  DAA: 'Diarrhée aqueuse aiguë (toutes formes)', DRA: 'Maladie du ver de Guinée (dracunculose)',
   FHV: 'Fièvre hémorragique virale', FJA: 'Fièvre jaune', MEN: 'Méningite',
   RAG: 'Rage (humaine)', ENV: 'Envenimation', PFA: 'Paralysie flasque aiguë',
   ROU: 'Rougeole', SRA: 'Syndrome respiratoire aigu sévère', TNN: 'Tétanos néonatal',
-  MPO: 'Mpox', DEM: 'Décès maternel', DNN: 'Décès néonatal', DEN: 'Décès néonatal',
-  TNE: 'Tétanos néonatal', VAS: 'Variole du singe (Mpox)',
+  MPO: 'Mpox / Variole du singe', DEM: 'Décès maternel', DNN: 'Décès néonatal', DEN: 'Décès néonatal',
+  TNE: 'Tétanos néonatal', VAS: 'Mpox / Variole du singe',
+  MOR: 'Morsures animales (chiens, serpents…)', GRI: 'Grippe',
 };
 
 const MOIS_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
@@ -327,15 +328,21 @@ function renderChartType(periodRows) {
 function renderTableEvents(periodRows, labelPeriode) {
   const verifPeriode = periodRows.filter(r => (r[7]||'').trim().toUpperCase() === 'HASVC');
   const verifCumul = RAW.filter(r => (r[7]||'').trim().toUpperCase() === 'HASVC');
+
+  // On ne garde que les signaux classés (on exclut "Autres / inclassifiables")
+  // et les pourcentages sont recalculés sur ce total classé uniquement.
+  const classesPeriode = verifPeriode.filter(r => evenementFinal(r) !== 'Autres / inclassifiables');
+  const classesCumul = verifCumul.filter(r => evenementFinal(r) !== 'Autres / inclassifiables');
+
   const countBy = rows => { const c = {}; rows.forEach(r => { const ev = evenementFinal(r); c[ev] = (c[ev]||0)+1; }); return c; };
-  const cPeriode = countBy(verifPeriode), cCumul = countBy(verifCumul);
+  const cPeriode = countBy(classesPeriode), cCumul = countBy(classesCumul);
 
-  let events = Array.from(new Set([...Object.keys(cPeriode), ...Object.keys(cCumul)])).filter(e => e !== 'Autres / inclassifiables');
+  let events = Array.from(new Set([...Object.keys(cPeriode), ...Object.keys(cCumul)]));
   events.sort((a,b) => (cCumul[b]||0) - (cCumul[a]||0));
-  if (cCumul['Autres / inclassifiables'] || cPeriode['Autres / inclassifiables']) events.push('Autres / inclassifiables');
 
-  const totalPeriode = verifPeriode.length || 1, totalCumul = verifCumul.length || 1;
-  document.getElementById('table2-sub').textContent = `${verifPeriode.length} signaux vérifiés sur la période · ${verifCumul.length} en cumul`;
+  const totalPeriode = classesPeriode.length || 1, totalCumul = classesCumul.length || 1;
+  document.getElementById('table2-sub').textContent =
+    `${classesPeriode.length} signaux classés sur la période · ${classesCumul.length} en cumul (signaux "Autres/inclassifiables" exclus)`;
 
   const yr = MAX_DATE.slice(0,4);
   let html = `<thead><tr>
@@ -353,8 +360,8 @@ function renderTableEvents(periodRows, labelPeriode) {
   });
   html += `<tr style="font-weight:700;">
     <td>Total</td>
-    <td style="text-align:center;">${verifPeriode.length} (100%)</td>
-    <td style="text-align:center;">${verifCumul.length} (100%)</td>
+    <td style="text-align:center;">${classesPeriode.length} (100%)</td>
+    <td style="text-align:center;">${classesCumul.length} (100%)</td>
   </tr></tbody>`;
   document.getElementById('table-events').innerHTML = html;
 }

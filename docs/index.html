@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <div class="kpi-row-title" id="kpi-periode-title-cumul">Depuis le début de l'année (cumul)</div>
+    <div class="kpi-row-title" id="kpi-periode-title-cumul">Depuis le début de l'année (cumul, non filtré)</div>
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-bar" style="background:#1B7339;"></div>
         <div class="kpi-num" style="color:#1B7339;" id="kpiC-total">-</div>
@@ -321,7 +321,7 @@ function render() {
   const periodRows = RAW.filter(r => r[0] && r[0] >= dateDebut && r[0] <= dateFin);
   const labelPeriode = `${fmtDate(dateDebut)} au ${fmtDate(dateFin)}`;
 
-  renderKpis('kpiC', RAW, `Depuis le début de l'année ${MAX_DATE.slice(0,4)} (cumul)`, 'kpi-periode-title-cumul');
+  renderKpis('kpiC', RAW, `Depuis le début de l'année ${MAX_DATE.slice(0,4)} (cumul, non filtré)`, 'kpi-periode-title-cumul');
   renderKpis('kpiP', periodRows, `Sur la période sélectionnée : ${labelPeriode}`, 'kpi-periode-title');
 
   document.getElementById('chart1-sub').textContent = labelPeriode;
@@ -375,10 +375,10 @@ function renderTableRegions(periodRows, labelPeriode) {
   const yr = MAX_DATE.slice(0,4);
   let html = `<thead>
     <tr>
-      <th rowspan="2">Région</th>
+      <th rowspan="2" style="background:#22A94B;color:#fff;text-align:left;">Régions</th>
       <th style="background:#A9D18E;color:#1F2937;text-align:center;">${labelPeriode}</th>
       <th style="background:#1F7A4D;text-align:center;">Cumul ${yr}</th>
-      <th rowspan="2">DS ayant capté des signaux (${labelPeriode})</th>
+      <th rowspan="2" style="background:#22A94B;color:#fff;text-align:left;">DS ayant capté des signaux/cas communautaires, ${labelPeriode}</th>
     </tr>
     <tr>
       <th style="background:#22A94B;text-align:center;">DHIS2</th>

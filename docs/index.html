@@ -128,6 +128,43 @@ const DICO_EVENEMENTS = {
   MOR: 'Morsures animales (chiens, serpents…)', GRI: 'Grippe',
 };
 
+// ------------------------------------------------------------
+// NIVEAU 1 : classification du commentaire libre (sbc_commentaires)
+// Reproduit classifier_vectorise() du script R. Liste "themes"
+// partielle à ce stade (3 catégories confirmées) — à compléter
+// au fur et à mesure que le reste du script R est transmis.
+// ------------------------------------------------------------
+
+const THEMES_COMMENTAIRE = [
+  ['AVP (Accidents, agressions)', [
+    'accident', 'blessure', 'bless[ée]', 'couteau', 'traumatisme',
+    'br[ûu]lure', 'chute', 'carreaux', 'electrocution',
+    'fracture', '\\bavp\\b', '\\bmoto\\b', 'plaie', 'coupure',
+  ]],
+  ['Intoxications alimentaires', [
+    'intoxication', 'aliment', 'souill[ée]', 'empoisonnement',
+    'consomm[ée]', 'alimentaire',
+  ]],
+];
+
+// Commentaires assimilés à "vide" — enrichie avec les valeurs réellement
+// observées dans les données (ras: 453 occurrences, test: 56, etc.)
+const TRIVIAL = [
+  '', '-', '.', '0', 'rien', 'aucun', 'rar', 'neant', 'néant', 'na', 'n/a',
+  'ras', 'r.a.s', 'r.a.s.', 'rien à signaler', 'test', 'texte',
+];
+
+function classifierVectorise(commentaire) {
+  const c = (commentaire || '').trim().toLowerCase();
+  if (!c || TRIVIAL.includes(c)) return null; // commentaire vide/trivial -> non concluant
+  for (const [theme, mots] of THEMES_COMMENTAIRE) {
+    if (new RegExp(mots.join('|'), 'i').test(c)) return theme;
+  }
+  return 'Autres / inclassifiables';
+}
+
+
+
 const MOIS_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 function fmtDate(d) { const [y,m,day] = d.split('-').map(Number); return `${day} ${MOIS_FR[m-1]} ${y}`; }
 function isoDaysAgo(dateStr, days) { const d = new Date(dateStr+'T00:00:00'); d.setDate(d.getDate()-days); return d.toISOString().slice(0,10); }
@@ -139,12 +176,28 @@ function typeSignal(sbcType) {
   return 'Communautaires';
 }
 
+// Reproduit exactement le filtre du script R :
+// base_verifie <- base %>% filter(sbc_code_d_acces_au_tirage_et_verification == "HASVC")
+// Égalité stricte — aucune variante/faute de frappe n'est acceptée.
+function isVerifie(code) {
+  return (code || '').trim().toUpperCase() === 'HASVC';
+}
+
 function evenementFinal(row) {
+  // Niveau 1 : commentaire libre (AVP et Intoxications alimentaires uniquement)
+  const commentaire = row[8] || '';
+  const theme1 = classifierVectorise(commentaire);
+  if (theme1 && theme1 !== 'Autres / inclassifiables') return theme1;
+
+  // Niveau 2 : champ "événement retenu" (code officiel)
   const retenu = (row[6] || '').trim().toUpperCase();
   if (retenu && DICO_EVENEMENTS[retenu]) return DICO_EVENEMENTS[retenu];
+
+  // Niveau 3 : sbc_type, en excluant les codes de canal (SH*/SC*)
   const type = (row[5] || '').trim().toUpperCase();
   const estCanal = /^SH/.test(type) || /^SC/.test(type);
   if (!estCanal && DICO_EVENEMENTS[type]) return DICO_EVENEMENTS[type];
+
   return 'Autres / inclassifiables';
 }
 
@@ -326,8 +379,8 @@ function renderChartType(periodRows) {
 }
 
 function renderTableEvents(periodRows, labelPeriode) {
-  const verifPeriode = periodRows.filter(r => (r[7]||'').trim().toUpperCase() === 'HASVC');
-  const verifCumul = RAW.filter(r => (r[7]||'').trim().toUpperCase() === 'HASVC');
+  const verifPeriode = periodRows.filter(r => isVerifie(r[7]));
+  const verifCumul = RAW.filter(r => isVerifie(r[7]));
 
   // On ne garde que les signaux classés (on exclut "Autres / inclassifiables")
   // et les pourcentages sont recalculés sur ce total classé uniquement.

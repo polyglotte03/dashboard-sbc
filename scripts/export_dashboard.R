@@ -1,4 +1,3 @@
-
 # PIPELINE DHIS2 - EXTRACTION + TRANSFORMATION OPTIMISEES -----------------
 
 # Optimisations par rapport a la version initiale :
@@ -357,6 +356,8 @@ cat("\nPipeline termine. df_geo :", nrow(df_geo), "lignes,", ncol(df_geo), "colo
 #   [6] sbc_type
 #   [7] sbc_nom_de_l_evenement_retenu
 #   [8] sbc_code_d_acces_au_tirage_et_verification
+#   [9] sbc_commentaires (texte libre, pour la classification niveau 1
+#       cote dashboard - cf. classifier_vectorise dans le pipeline R)
 # ============================================================
 
 library(jsonlite)
@@ -372,7 +373,8 @@ df_export <- df_geo %>%
     as       = as,
     sbc_type = sbc_type,
     sbc_nom_de_l_evenement_retenu = sbc_nom_de_l_evenement_retenu,
-    sbc_code_d_acces_au_tirage_et_verification = sbc_code_d_acces_au_tirage_et_verification
+    sbc_code_d_acces_au_tirage_et_verification = sbc_code_d_acces_au_tirage_et_verification,
+    sbc_commentaires = sbc_commentaires
   )
 
 write(

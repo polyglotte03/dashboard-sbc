@@ -127,7 +127,7 @@
     </div>
 
     <div class="card table-card">
-      <div class="card-title">Signaux par événement — surveillance SBE/SBC (signaux triés/vérifiés HASVC)</div>
+      <div class="card-title">Evénement — surveillance SFE/SBC</div>
       <div class="card-sub" id="table2-sub"></div>
       <table id="table-events"></table>
       <div class="foot-note">Source : DHIS2</div>
@@ -469,7 +469,7 @@ function renderTableEvents(periodRows, labelPeriode) {
 
   const totalPeriode = classesPeriode.length || 1, totalCumul = classesCumul.length || 1;
   document.getElementById('table2-sub').textContent =
-    `${classesPeriode.length} signaux classés sur la période · ${classesCumul.length} en cumul (signaux "Autres/inclassifiables" exclus)`;
+    `${classesPeriode.length} évènements classés sur la période · ${classesCumul.length} en cumul`;
 
   const yr = MAX_DATE.slice(0,4);
   let html = `<thead><tr>

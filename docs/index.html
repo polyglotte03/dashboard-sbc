@@ -73,7 +73,7 @@
         <div class="kpi-desc" id="kpiC-actifs-sub">Cumul signaux actifs</div></div>
       <div class="kpi-card"><div class="kpi-bar" style="background:#1F9D55;"></div>
         <div class="kpi-num" style="color:#1F9D55;" id="kpiC-completes">-</div>
-        <div class="kpi-desc" id="kpiC-completes-sub">Cumul signaux complétés</div></div>
+        <div class="kpi-desc" id="kpiC-completes-sub">Cumul signaux traités</div></div>
       <div class="kpi-card"><div class="kpi-bar" style="background:#002060;"></div>
         <div class="kpi-num" style="color:#002060;" id="kpiC-ds">-</div>
         <div class="kpi-desc">Districts sanitaires actifs</div></div>
@@ -92,7 +92,7 @@
         <div class="kpi-desc" id="kpiP-actifs-sub">Signaux actifs</div></div>
       <div class="kpi-card"><div class="kpi-bar" style="background:#1F9D55;"></div>
         <div class="kpi-num" style="color:#1F9D55;" id="kpiP-completes">-</div>
-        <div class="kpi-desc" id="kpiP-completes-sub">Signaux complétés</div></div>
+        <div class="kpi-desc" id="kpiP-completes-sub">Signaux traités</div></div>
       <div class="kpi-card"><div class="kpi-bar" style="background:#002060;"></div>
         <div class="kpi-num" style="color:#002060;" id="kpiP-ds">-</div>
         <div class="kpi-desc">Districts sanitaires actifs</div></div>
@@ -347,7 +347,7 @@ function renderKpis(prefix, rows, titleText, titleElId) {
   document.getElementById(`${prefix}-actifs`).textContent = actifs.toLocaleString('fr-FR');
   document.getElementById(`${prefix}-actifs-sub`).textContent = `Signaux actifs (${pctActifs} %)`;
   document.getElementById(`${prefix}-completes`).textContent = completes.toLocaleString('fr-FR');
-  document.getElementById(`${prefix}-completes-sub`).textContent = `Signaux complétés (${pctCompletes} %)`;
+  document.getElementById(`${prefix}-completes-sub`).textContent = `Signaux traités (${pctCompletes} %)`;
   document.getElementById(`${prefix}-ds`).textContent = dsActifs.toLocaleString('fr-FR');
   document.getElementById(`${prefix}-regions`).textContent = `${regionsActives} / 10`;
 }

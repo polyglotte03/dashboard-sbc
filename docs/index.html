@@ -9,32 +9,32 @@
   * { box-sizing: border-box; }
   body { margin: 0; background: #F8F7F3; font-family: system-ui, -apple-system, sans-serif; color: #1F2937; }
   .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; }
-  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: #1F7A4D; text-transform: uppercase; }
-  h1 { font-size: 26px; font-weight: 700; margin: 4px 0 2px; }
-  .sub { font-size: 13px; color: #6B7280; }
+  .eyebrow { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; color: #1F7A4D; text-transform: uppercase; }
+  h1 { font-size: 32px; font-weight: 800; margin: 4px 0 2px; }
+  .sub { font-size: 15px; font-weight: 600; color: #4B5563; }
   .card { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 16px; }
   .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 20px 0; padding: 14px 16px; }
-  .preset-btn { padding: 6px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; border: 1px solid #E5E7EB; background: #fff; color: #374151; }
-  .preset-btn.active { border-color: #1F7A4D; background: #EAF3EE; color: #1F7A4D; font-weight: 600; }
+  .preset-btn { padding: 7px 14px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid #E5E7EB; background: #fff; color: #374151; }
+  .preset-btn.active { border-color: #1F7A4D; background: #EAF3EE; color: #1F7A4D; font-weight: 700; }
   .divider { width: 1px; height: 24px; background: #E5E7EB; }
-  input[type=date] { border: 1px solid #E5E7EB; border-radius: 6px; padding: 5px 8px; font-size: 13px; }
+  input[type=date] { border: 1px solid #E5E7EB; border-radius: 6px; padding: 5px 8px; font-size: 14px; font-weight: 600; }
   .kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 14px; }
-  .kpi-row-title { font-size: 12px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.04em; margin: 18px 0 8px; }
+  .kpi-row-title { font-size: 14px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.04em; margin: 18px 0 8px; }
   .kpi-card { background: #FAFAF8; border-radius: 8px; padding: 16px 10px 14px; text-align: center; overflow: hidden; }
   .kpi-bar { height: 5px; margin: -16px -10px 14px; }
-  .kpi-num { font-size: 26px; font-weight: 700; line-height: 1.1; }
-  .kpi-desc { font-size: 12px; color: #4B5563; margin-top: 8px; line-height: 1.3; }
+  .kpi-num { font-size: 34px; font-weight: 800; line-height: 1.1; }
+  .kpi-desc { font-size: 13.5px; font-weight: 600; color: #374151; margin-top: 8px; line-height: 1.3; }
   .grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 20px; }
-  .card-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-  .card-sub { font-size: 12px; color: #6B7280; margin-bottom: 10px; }
-  .legend-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; font-size: 11px; color: #6B7280; }
-  .legend-dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; margin-right: 4px; }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th { border: 1px solid #1F2937; padding: 6px 10px; font-weight: 700; color: #fff; font-size: 11.5px; }
-  td { border: 1px solid #E5E7EB; padding: 6px 10px; }
-  .foot-note { font-size: 11px; color: #9CA3AF; margin-top: 8px; }
+  .card-title { font-size: 17px; font-weight: 700; margin-bottom: 2px; }
+  .card-sub { font-size: 13.5px; font-weight: 600; color: #4B5563; margin-bottom: 10px; }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; font-size: 13px; font-weight: 600; color: #374151; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 2px; display: inline-block; margin-right: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { border: 1px solid #1F2937; padding: 8px 10px; font-weight: 800; color: #fff; font-size: 13.5px; }
+  td { border: 1px solid #E5E7EB; padding: 7px 10px; font-weight: 500; }
+  .foot-note { font-size: 12px; font-weight: 600; color: #9CA3AF; margin-top: 8px; }
   .table-card { overflow-x: auto; margin-bottom: 20px; }
-  #status { font-size: 13px; color: #6B7280; padding: 40px 0; text-align: center; }
+  #status { font-size: 15px; font-weight: 600; color: #6B7280; padding: 40px 0; text-align: center; }
 </style>
 </head>
 <body>
@@ -55,7 +55,7 @@
         <button class="preset-btn" data-preset="cumul">Cumul annuel</button>
       </div>
       <div class="divider"></div>
-      <div style="display:flex; align-items:center; gap:8px; font-size:13px;">
+      <div style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600;">
         <span>Du</span>
         <input type="date" id="date-debut">
         <span>au</span>
@@ -116,7 +116,7 @@
         <div style="position:relative; height:230px;">
           <canvas id="chartType" role="img" aria-label="Répartition des signaux par type"></canvas>
         </div>
-        <div id="legend-type" style="display:flex; flex-direction:column; gap:6px; margin-top:8px; font-size:12px;"></div>
+        <div id="legend-type" style="display:flex; flex-direction:column; gap:6px; margin-top:8px; font-size:14px; font-weight:600;"></div>
       </div>
     </div>
 
@@ -384,11 +384,11 @@ function renderTableRegions(periodRows, labelPeriode) {
   </thead><tbody>`;
   rows.forEach((r,i) => {
     const isTotal = r.region === 'Total';
-    html += `<tr style="font-weight:${isTotal?700:400}; background:${i%2===0 && !isTotal ? '#FAFAF8':'#fff'};">
+    html += `<tr style="font-weight:${isTotal?800:600}; background:${i%2===0 && !isTotal ? '#FAFAF8':'#fff'};">
       <td>${r.region}</td>
-      <td style="text-align:center;">${r.periode}</td>
-      <td style="text-align:center;">${r.cumul}</td>
-      <td style="color:#6B7280;">${r.observations}</td>
+      <td style="text-align:center; font-weight:800;">${r.periode}</td>
+      <td style="text-align:center; font-weight:800;">${r.cumul}</td>
+      <td style="color:#374151; font-weight:500;">${r.observations}</td>
     </tr>`;
   });
   html += '</tbody>';
@@ -418,12 +418,12 @@ function renderChartDistricts(periodRows) {
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: {
+      plugins: { legend: { display: false }, tooltip: { bodyFont: { size: 13, weight: 600 }, callbacks: {
         label: ctx => `${data[ctx.dataIndex].n} signaux (${ctx.parsed.y.toFixed(1)}%)`
       } } },
       scales: {
-        x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 60, font: { size: 10 } } },
-        y: { ticks: { callback: v => v + '%' } },
+        x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 60, font: { size: 12, weight: 600 } } },
+        y: { ticks: { callback: v => v + '%', font: { size: 12, weight: 600 } } },
       },
     },
   });
@@ -439,7 +439,7 @@ function renderChartType(periodRows) {
   document.getElementById('legend-type').innerHTML = entries.map(d =>
     `<div style="display:flex; justify-content:space-between;">
       <span><span class="legend-dot" style="background:${d.color}"></span>${d.name}</span>
-      <span style="font-weight:600;">${d.value} (${d.pct.toFixed(1)}%)</span>
+      <span style="font-weight:800;">${d.value} (${d.pct.toFixed(1)}%)</span>
     </div>`
   ).join('');
 
@@ -448,7 +448,7 @@ function renderChartType(periodRows) {
     type: 'doughnut',
     data: { labels: entries.map(d=>d.name), datasets: [{ data: entries.map(d=>d.value), backgroundColor: entries.map(d=>d.color) }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false },
-      tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed} (${entries[ctx.dataIndex].pct.toFixed(1)}%)` } } } },
+      tooltip: { bodyFont: { size: 13, weight: 600 }, callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed} (${entries[ctx.dataIndex].pct.toFixed(1)}%)` } } } },
   });
 }
 
@@ -480,12 +480,12 @@ function renderTableEvents(periodRows, labelPeriode) {
   events.forEach((ev,i) => {
     const p = cPeriode[ev]||0, c = cCumul[ev]||0;
     html += `<tr style="background:${i%2===0?'#FAFAF8':'#fff'};">
-      <td>${ev}</td>
-      <td style="text-align:center;">${p} (${(p/totalPeriode*100).toFixed(1)}%)</td>
-      <td style="text-align:center;">${c} (${(c/totalCumul*100).toFixed(1)}%)</td>
+      <td style="font-weight:600;">${ev}</td>
+      <td style="text-align:center; font-weight:700;">${p} (${(p/totalPeriode*100).toFixed(1)}%)</td>
+      <td style="text-align:center; font-weight:700;">${c} (${(c/totalCumul*100).toFixed(1)}%)</td>
     </tr>`;
   });
-  html += `<tr style="font-weight:700;">
+  html += `<tr style="font-weight:800;">
     <td>Total</td>
     <td style="text-align:center;">${classesPeriode.length} (100%)</td>
     <td style="text-align:center;">${classesCumul.length} (100%)</td>
@@ -577,17 +577,17 @@ function renderTableDelais(periodRows, labelPeriode) {
   regions.forEach((r, i) => {
     const s = parRegion[r];
     html += `<tr style="background:${i % 2 === 0 ? '#FAFAF8' : '#fff'};">
-      <td>${r}</td>
-      <td style="text-align:center;">${s.signaux}</td>
-      <td style="text-align:center;">${s.notifies24h}</td>
-      <td style="text-align:center;">${cell(s.verifies24h, s.signaux)}</td>
-      <td style="text-align:center;">${cell(s.investigues48h, s.signaux)}</td>
-      <td style="text-align:center;">${cell(s.transformes48h, s.signaux)}</td>
-      <td style="text-align:center;">${cell(s.evalues, s.transformes48h)}</td>
+      <td style="font-weight:700;">${r}</td>
+      <td style="text-align:center; font-weight:700;">${s.signaux}</td>
+      <td style="text-align:center; font-weight:700;">${s.notifies24h}</td>
+      <td style="text-align:center; font-weight:700;">${cell(s.verifies24h, s.signaux)}</td>
+      <td style="text-align:center; font-weight:700;">${cell(s.investigues48h, s.signaux)}</td>
+      <td style="text-align:center; font-weight:700;">${cell(s.transformes48h, s.signaux)}</td>
+      <td style="text-align:center; font-weight:700;">${cell(s.evalues, s.transformes48h)}</td>
     </tr>`;
   });
 
-  html += `<tr style="font-weight:700;">
+  html += `<tr style="font-weight:800;">
     <td>Total</td>
     <td style="text-align:center;">${total.signaux}</td>
     <td style="text-align:center;">${total.notifies24h}</td>

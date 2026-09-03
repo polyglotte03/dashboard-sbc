@@ -1,5 +1,3 @@
-# PIPELINE DHIS2 - EXTRACTION + TRANSFORMATION OPTIMISEES -----------------
-
 # Optimisations par rapport a la version initiale :
 #
 #  1. "fields" restreint cote API (events.json) : on ne demande

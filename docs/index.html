@@ -36,7 +36,8 @@
   .table-card { overflow-x: auto; margin-bottom: 20px; }
   #status { font-size: 15px; font-weight: 600; color: #6B7280; padding: 40px 0; text-align: center; }
   .favoris-title { font-weight: 700; color: #92400E; margin: 0 0 6px; font-size: 13.5px; text-transform: uppercase; letter-spacing: 0.03em; }
-  .favoris-line { font-weight: 600; color: #1F2937; margin: 0 0 3px; }
+  .favoris-columns { columns: 3 260px; column-gap: 24px; }
+  .favoris-line { font-weight: 600; color: #1F2937; margin: 0 0 3px; break-inside: avoid; }
 </style>
 </head>
 <body>
@@ -400,18 +401,18 @@ function renderTableRegions(periodRows, labelPeriode) {
   document.getElementById('table-regions').innerHTML = html;
 }
 
-// Ajout : liste de vigilance textuelle, district (région) : n cas de <événement>.
-// Se limite au Mpox pour l'instant ; ne modifie aucune fonction existante.
+// Ajout : liste de vigilance textuelle, district (région) : n cas de <événement>,
+// pour tous les types d'évènements. Ne modifie aucune fonction existante.
 function renderFavoris(periodRows) {
   const el = document.getElementById('favoris-mpox');
   if (!el) return;
 
   const counts = {};
   periodRows.forEach(r => {
-    if (evenementFinal(r) === 'Mpox / Variole du singe') {
-      const key = `${r[3]}|${r[2]}`; // district|région
-      counts[key] = (counts[key] || 0) + 1;
-    }
+    const ev = evenementFinal(r);
+    if (ev === 'Autres / inclassifiables') return;
+    const key = `${r[3]}|${r[2]}|${ev}`; // district|région|évènement
+    counts[key] = (counts[key] || 0) + 1;
   });
 
   const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
@@ -422,11 +423,12 @@ function renderFavoris(periodRows) {
   }
 
   el.style.display = 'block';
-  el.innerHTML = '<div class="favoris-title">À surveiller — signaux Mpox sur la période</div>' +
-    entries.map(([key, n]) => {
-      const [district, region] = key.split('|');
-      return `<div class="favoris-line">${district} (${region}) : ${n} cas de Mpox</div>`;
-    }).join('');
+  const lines = entries.map(([key, n]) => {
+    const [district, region, ev] = key.split('|');
+    return `<div class="favoris-line">${district} (${region}) : ${n} cas de ${ev}</div>`;
+  }).join('');
+  el.innerHTML = `<div class="favoris-title">À surveiller — signaux par district sur la période</div>
+    <div class="favoris-columns">${lines}</div>`;
 }
 
 function renderChartDistricts(periodRows) {

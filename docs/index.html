@@ -9,13 +9,13 @@
   * { box-sizing: border-box; }
   body { margin: 0; background: #F8F7F3; font-family: system-ui, -apple-system, sans-serif; color: #1F2937; }
   .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; }
-  .eyebrow { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; color: #1F7A4D; text-transform: uppercase; }
+  .eyebrow { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; color: #008000; text-transform: uppercase; }
   h1 { font-size: 32px; font-weight: 800; margin: 4px 0 2px; }
   .sub { font-size: 15px; font-weight: 600; color: #4B5563; }
   .card { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 16px; }
   .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 20px 0; padding: 14px 16px; }
   .preset-btn { padding: 7px 14px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid #E5E7EB; background: #fff; color: #374151; }
-  .preset-btn.active { border-color: #1F7A4D; background: #EAF3EE; color: #1F7A4D; font-weight: 700; }
+  .preset-btn.active { border-color: #008000; background: #E8F2E8; color: #008000; font-weight: 700; }
   .divider { width: 1px; height: 24px; background: #E5E7EB; }
   input[type=date] { border: 1px solid #E5E7EB; border-radius: 6px; padding: 5px 8px; font-size: 14px; font-weight: 600; }
   .kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 14px; }
@@ -35,7 +35,7 @@
   .foot-note { font-size: 12px; font-weight: 600; color: #9CA3AF; margin-top: 8px; }
   .table-card { overflow-x: auto; margin-bottom: 20px; }
   #status { font-size: 15px; font-weight: 600; color: #6B7280; padding: 40px 0; text-align: center; }
-  .favoris-title { font-weight: 700; color: #92400E; margin: 0 0 6px; font-size: 13.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .favoris-title { font-weight: 700; color: #8A7B00; margin: 0 0 6px; font-size: 13.5px; text-transform: uppercase; letter-spacing: 0.03em; }
   .favoris-columns { columns: 3 260px; column-gap: 24px; }
   .favoris-line { font-weight: 600; color: #1F2937; margin: 0 0 3px; break-inside: avoid; }
 </style>
@@ -68,17 +68,17 @@
 
     <div class="kpi-row-title" id="kpi-periode-title-cumul">Depuis le début de l'année (cumul, non filtré)</div>
     <div class="kpi-row">
-      <div class="kpi-card"><div class="kpi-bar" style="background:#1B7339;"></div>
-        <div class="kpi-num" style="color:#1B7339;" id="kpiC-total">-</div>
+      <div class="kpi-card"><div class="kpi-bar" style="background:#008000;"></div>
+        <div class="kpi-num" style="color:#008000;" id="kpiC-total">-</div>
         <div class="kpi-desc">Cumul signaux enregistrés</div></div>
       <div class="kpi-card"><div class="kpi-bar" style="background:#D6A700;"></div>
         <div class="kpi-num" style="color:#D6A700;" id="kpiC-actifs">-</div>
         <div class="kpi-desc" id="kpiC-actifs-sub">Cumul signaux actifs</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#1F9D55;"></div>
-        <div class="kpi-num" style="color:#1F9D55;" id="kpiC-completes">-</div>
+      <div class="kpi-card"><div class="kpi-bar" style="background:#008000;"></div>
+        <div class="kpi-num" style="color:#008000;" id="kpiC-completes">-</div>
         <div class="kpi-desc" id="kpiC-completes-sub">Cumul signaux traités</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#002060;"></div>
-        <div class="kpi-num" style="color:#002060;" id="kpiC-ds">-</div>
+      <div class="kpi-card"><div class="kpi-bar" style="background:#808080;"></div>
+        <div class="kpi-num" style="color:#808080;" id="kpiC-ds">-</div>
         <div class="kpi-desc">Districts sanitaires actifs</div></div>
       <div class="kpi-card"><div class="kpi-bar" style="background:#C62828;"></div>
         <div class="kpi-num" style="color:#C62828;" id="kpiC-regions">-</div>
@@ -87,17 +87,17 @@
 
     <div class="kpi-row-title" id="kpi-periode-title">Sur la période sélectionnée</div>
     <div class="kpi-row">
-      <div class="kpi-card"><div class="kpi-bar" style="background:#1B7339;"></div>
-        <div class="kpi-num" style="color:#1B7339;" id="kpiP-total">-</div>
+      <div class="kpi-card"><div class="kpi-bar" style="background:#008000;"></div>
+        <div class="kpi-num" style="color:#008000;" id="kpiP-total">-</div>
         <div class="kpi-desc">Signaux enregistrés</div></div>
       <div class="kpi-card"><div class="kpi-bar" style="background:#D6A700;"></div>
         <div class="kpi-num" style="color:#D6A700;" id="kpiP-actifs">-</div>
         <div class="kpi-desc" id="kpiP-actifs-sub">Signaux actifs</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#1F9D55;"></div>
-        <div class="kpi-num" style="color:#1F9D55;" id="kpiP-completes">-</div>
+      <div class="kpi-card"><div class="kpi-bar" style="background:#008000;"></div>
+        <div class="kpi-num" style="color:#008000;" id="kpiP-completes">-</div>
         <div class="kpi-desc" id="kpiP-completes-sub">Signaux traités</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#002060;"></div>
-        <div class="kpi-num" style="color:#002060;" id="kpiP-ds">-</div>
+      <div class="kpi-card"><div class="kpi-bar" style="background:#808080;"></div>
+        <div class="kpi-num" style="color:#808080;" id="kpiP-ds">-</div>
         <div class="kpi-desc">Districts sanitaires actifs</div></div>
       <div class="kpi-card"><div class="kpi-bar" style="background:#C62828;"></div>
         <div class="kpi-num" style="color:#C62828;" id="kpiP-regions">-</div>
@@ -158,7 +158,7 @@ const REGIONS_CM = [
 ];
 
 const REGION_COLOR = {
-  Centre: '#1F2937', Sud: '#1F7A4D', 'Nord-Ouest': '#2E5EAA', Nord: '#D97706',
+  Centre: '#1F2937', Sud: '#0A2E0A', 'Nord-Ouest': '#2E5EAA', Nord: '#D97706',
   Ouest: '#C0392B', 'Sud-Ouest': '#D6559C', 'Extreme-Nord': '#7C3AED',
   Adamaoua: '#0E7490', Littoral: '#65A30D', Est: '#92400E',
 };
@@ -378,14 +378,14 @@ function renderTableRegions(periodRows, labelPeriode) {
   const yr = MAX_DATE.slice(0,4);
   let html = `<thead>
     <tr>
-      <th rowspan="2" style="background:#22A94B;color:#fff;text-align:left;">Régions</th>
+      <th rowspan="2" style="background:#008000;color:#fff;text-align:left;">Régions</th>
       <th style="background:#A9D18E;color:#1F2937;text-align:center;">${labelPeriode}</th>
-      <th style="background:#1F7A4D;text-align:center;">Cumul ${yr}</th>
-      <th rowspan="2" style="background:#22A94B;color:#fff;text-align:left;">DS ayant capté des signaux/cas communautaires, ${labelPeriode}</th>
+      <th style="background:#0A2E0A;text-align:center;">Cumul ${yr}</th>
+      <th rowspan="2" style="background:#008000;color:#fff;text-align:left;">DS ayant capté des signaux/cas communautaires, ${labelPeriode}</th>
     </tr>
     <tr>
-      <th style="background:#22A94B;text-align:center;">DHIS2</th>
-      <th style="background:#22A94B;text-align:center;">DHIS2</th>
+      <th style="background:#008000;text-align:center;">DHIS2</th>
+      <th style="background:#008000;text-align:center;">DHIS2</th>
     </tr>
   </thead><tbody>`;
   rows.forEach((r,i) => {
@@ -469,7 +469,7 @@ function renderChartType(periodRows) {
   const counts = { Communautaires: 0, Hospitaliers: 0, "Centre d'appel": 0 };
   periodRows.forEach(r => { counts[typeSignal(r[5])]++; });
   const total = Object.values(counts).reduce((a,b)=>a+b,0) || 1;
-  const colors = { Communautaires: '#1F7A4D', Hospitaliers: '#2E5EAA', "Centre d'appel": '#D97706' };
+  const colors = { Communautaires: '#0A2E0A', Hospitaliers: '#2E5EAA', "Centre d'appel": '#D97706' };
   const entries = Object.entries(counts).map(([name,value]) => ({ name, value, pct: value/total*100, color: colors[name] }));
 
   document.getElementById('legend-type').innerHTML = entries.map(d =>
@@ -509,9 +509,9 @@ function renderTableEvents(periodRows, labelPeriode) {
 
   const yr = MAX_DATE.slice(0,4);
   let html = `<thead><tr>
-    <th style="background:#22A94B;text-align:left;">Événements</th>
-    <th style="background:#22A94B;text-align:center;">Nbre (%) : ${labelPeriode}</th>
-    <th style="background:#22A94B;text-align:center;">Cumul ${yr}</th>
+    <th style="background:#008000;text-align:left;">Événements</th>
+    <th style="background:#008000;text-align:center;">Nbre (%) : ${labelPeriode}</th>
+    <th style="background:#008000;text-align:center;">Cumul ${yr}</th>
   </tr></thead><tbody>`;
   events.forEach((ev,i) => {
     const p = cPeriode[ev]||0, c = cCumul[ev]||0;
@@ -601,13 +601,13 @@ function renderTableDelais(periodRows, labelPeriode) {
   const cell = (n, d) => `${n} (${pct(n, d)} %)`;
 
   let html = `<thead><tr>
-    <th style="background:#22A94B;text-align:left;">Région</th>
-    <th style="background:#22A94B;text-align:center;">Nombre de signaux notifiés</th>
-    <th style="background:#22A94B;text-align:center;">Nombre de signaux notifiés dans les 24h</th>
-    <th style="background:#22A94B;text-align:center;">% de signaux vérifiés dans les 24h</th>
-    <th style="background:#22A94B;text-align:center;">% de signaux investigués dans les 48h</th>
-    <th style="background:#22A94B;text-align:center;">% de signaux transformés en évènements dans les 48h</th>
-    <th style="background:#22A94B;text-align:center;">% d'évènements ayant bénéficié d'une évaluation de risque</th>
+    <th style="background:#008000;text-align:left;">Région</th>
+    <th style="background:#008000;text-align:center;">Nombre de signaux notifiés</th>
+    <th style="background:#008000;text-align:center;">Nombre de signaux notifiés dans les 24h</th>
+    <th style="background:#008000;text-align:center;">% de signaux vérifiés dans les 24h</th>
+    <th style="background:#008000;text-align:center;">% de signaux investigués dans les 48h</th>
+    <th style="background:#008000;text-align:center;">% de signaux transformés en évènements dans les 48h</th>
+    <th style="background:#008000;text-align:center;">% d'évènements ayant bénéficié d'une évaluation de risque</th>
   </tr></thead><tbody>`;
 
   regions.forEach((r, i) => {

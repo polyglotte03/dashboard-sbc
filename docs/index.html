@@ -407,8 +407,13 @@ function renderFavoris(periodRows) {
   const el = document.getElementById('favoris-mpox');
   if (!el) return;
 
+  // Même filtre que le tableau "Evénement — surveillance SFE/SBC" (isVerifie),
+  // pour que les deux sections comptent exactement les mêmes évènements sur
+  // la même période.
+  const verifRows = periodRows.filter(r => isVerifie(r[7]));
+
   const counts = {};
-  periodRows.forEach(r => {
+  verifRows.forEach(r => {
     const ev = evenementFinal(r);
     if (ev === 'Autres / inclassifiables') return;
     const key = `${r[3]}|${r[2]}|${ev}`; // district|région|évènement
@@ -425,9 +430,9 @@ function renderFavoris(periodRows) {
   el.style.display = 'block';
   const lines = entries.map(([key, n]) => {
     const [district, region, ev] = key.split('|');
-    return `<div class="favoris-line">${district} (${region}) : ${n} cas de ${ev}</div>`;
+    return `<div class="favoris-line">${district} (${region}) : ${n} évènement${n>1?'s':''} de ${ev}</div>`;
   }).join('');
-  el.innerHTML = `<div class="favoris-title">À surveiller — signaux par district sur la période</div>
+  el.innerHTML = `<div class="favoris-title">À surveiller — évènements par district sur la période</div>
     <div class="favoris-columns">${lines}</div>`;
 }
 

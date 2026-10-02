@@ -40,8 +40,14 @@ library(janitor)
 # 0. IDENTIFIANTS ET PARAMETRES -------------------------------------------
 
 base_url <- Sys.getenv("DHIS_BASE_URL", unset = "https://dhis-minsante-cm.org/")
-user     <- Sys.getenv("DHIS_USER",     unset = "DLMEP-SDLEP")
-pass     <- Sys.getenv("DHIS_PASS",     unset = "Dhis@2026")
+user     <- Sys.getenv("DHIS_USER")
+pass     <- Sys.getenv("DHIS_PASS")
+
+# Les identifiants viennent UNIQUEMENT des variables d'environnement
+# (secrets GitHub). Aucun identifiant ne doit etre ecrit dans ce fichier.
+if (user == "" || pass == "") {
+  stop("DHIS_USER et DHIS_PASS doivent etre definis (secrets GitHub ou Sys.setenv() en local).")
+}
 
 program_uid <- "qzoEGacp6VP"
 orgunit_uid <- "cfCqpzvsgXZ"

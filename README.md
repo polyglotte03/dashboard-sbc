@@ -24,7 +24,7 @@ scripts/export_dashboard.R   -> extraction DHIS2 + export JSON
 3. **Ajouter les identifiants DHIS2 en secrets** (jamais en clair dans le
    code) : dans le dépôt GitHub → *Settings* → *Secrets and variables* →
    *Actions* → *New repository secret* :
-   - `DHIS_USER` = `DLMEP-SDLEP`
+   - `DHIS_USER` = le nom d'utilisateur DHIS2
    - `DHIS_PASS` = le mot de passe DHIS2
 
    Retirez ensuite le nom d'utilisateur/mot de passe en dur du script si

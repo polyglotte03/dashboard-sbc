@@ -38,21 +38,50 @@
   .favoris-title { font-weight: 700; color: #8A7B00; margin: 0 0 6px; font-size: 13.5px; text-transform: uppercase; letter-spacing: 0.03em; }
   .favoris-columns { columns: 3 260px; column-gap: 24px; }
   .favoris-line { font-weight: 600; color: #1F2937; margin: 0 0 3px; break-inside: avoid; }
+  .tabs { display: flex; gap: 4px; margin-top: 18px; border-bottom: 2px solid #E5E7EB; }
+  .tab-btn { padding: 10px 18px; font-size: 15px; font-weight: 700; color: #4B5563; background: none; border: none; border-bottom: 3px solid transparent; margin-bottom: -2px; cursor: pointer; }
+  .tab-btn.active { color: #008000; border-bottom-color: #008000; }
+  .tab-btn:focus-visible, .preset-btn:focus-visible, select:focus-visible, #login button:focus-visible, #login input:focus-visible { outline: 2px solid #008000; outline-offset: 2px; }
+  select { border: 1px solid #E5E7EB; border-radius: 6px; padding: 6px 8px; font-size: 14px; font-weight: 600; background: #fff; color: #1F2937; }
+  #region-filter { display: none; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
+  #login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  #login .card { width: 100%; max-width: 380px; padding: 28px 24px; }
+  #login h1 { font-size: 24px; margin: 4px 0 18px; }
+  #login label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  #login input { width: 100%; border: 1px solid #D1D5DB; border-radius: 6px; padding: 10px 12px; font-size: 16px; }
+  #login button { width: 100%; margin-top: 14px; padding: 10px; border: none; border-radius: 6px; background: #008000; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
+  #login-error { color: #C62828; font-size: 14px; font-weight: 600; margin-top: 10px; min-height: 20px; }
+  @media (max-width: 760px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } .grid-2 { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div id="login">
+  <div class="card">
+    <div class="eyebrow">Surveillance à base communautaire</div>
+    <h1>Tableau de bord des signaux SBC</h1>
+    <label for="login-pass">Mot de passe</label>
+    <input type="password" id="login-pass" autocomplete="current-password" autofocus>
+    <button type="button" id="login-btn">Se connecter</button>
+    <div id="login-error" role="alert"></div>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none;">
   <header>
     <div class="eyebrow">Surveillance à base communautaire</div>
     <h1>Tableau de bord des signaux SBC</h1>
     <div class="sub" id="header-sub">Chargement…</div>
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" role="tab" data-view="national">Vue nationale</button>
+      <button class="tab-btn" role="tab" data-view="regional">Vue régionale</button>
+    </nav>
   </header>
 
   <div id="status">Chargement des données…</div>
   <div id="content" style="display:none;">
 
     <div class="card filters">
-      <div style="display:flex; gap:6px;">
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
         <button class="preset-btn" data-preset="7j">7 derniers jours</button>
         <button class="preset-btn" data-preset="30j">30 derniers jours</button>
         <button class="preset-btn" data-preset="cumul">Cumul annuel</button>
@@ -64,86 +93,15 @@
         <span>au</span>
         <input type="date" id="date-fin">
       </div>
-    </div>
-
-    <div class="kpi-row-title" id="kpi-periode-title-cumul">Depuis le début de l'année (cumul, non filtré)</div>
-    <div class="kpi-row">
-      <div class="kpi-card"><div class="kpi-bar" style="background:#008000;"></div>
-        <div class="kpi-num" style="color:#008000;" id="kpiC-total">-</div>
-        <div class="kpi-desc">Cumul signaux enregistrés</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#D6A700;"></div>
-        <div class="kpi-num" style="color:#D6A700;" id="kpiC-actifs">-</div>
-        <div class="kpi-desc" id="kpiC-actifs-sub">Cumul signaux actifs</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#008000;"></div>
-        <div class="kpi-num" style="color:#008000;" id="kpiC-completes">-</div>
-        <div class="kpi-desc" id="kpiC-completes-sub">Cumul signaux traités</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#808080;"></div>
-        <div class="kpi-num" style="color:#808080;" id="kpiC-ds">-</div>
-        <div class="kpi-desc">Districts sanitaires actifs</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#C62828;"></div>
-        <div class="kpi-num" style="color:#C62828;" id="kpiC-regions">-</div>
-        <div class="kpi-desc">Régions ayant remonté des signaux</div></div>
-    </div>
-
-    <div class="kpi-row-title" id="kpi-periode-title">Sur la période sélectionnée</div>
-    <div class="kpi-row">
-      <div class="kpi-card"><div class="kpi-bar" style="background:#008000;"></div>
-        <div class="kpi-num" style="color:#008000;" id="kpiP-total">-</div>
-        <div class="kpi-desc">Signaux enregistrés</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#D6A700;"></div>
-        <div class="kpi-num" style="color:#D6A700;" id="kpiP-actifs">-</div>
-        <div class="kpi-desc" id="kpiP-actifs-sub">Signaux actifs</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#008000;"></div>
-        <div class="kpi-num" style="color:#008000;" id="kpiP-completes">-</div>
-        <div class="kpi-desc" id="kpiP-completes-sub">Signaux traités</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#808080;"></div>
-        <div class="kpi-num" style="color:#808080;" id="kpiP-ds">-</div>
-        <div class="kpi-desc">Districts sanitaires actifs</div></div>
-      <div class="kpi-card"><div class="kpi-bar" style="background:#C62828;"></div>
-        <div class="kpi-num" style="color:#C62828;" id="kpiP-regions">-</div>
-        <div class="kpi-desc">Régions ayant remonté des signaux</div></div>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">Répartition des signaux par district (top 15)</div>
-        <div class="card-sub" id="chart1-sub"></div>
-        <div style="position:relative; height:360px;">
-          <canvas id="chartDistricts" role="img" aria-label="Répartition en pourcentage des signaux par district"></canvas>
-        </div>
-        <div class="legend-row" id="legend-regions"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Type de signal</div>
-        <div class="card-sub" id="chart2-sub"></div>
-        <div style="position:relative; height:230px;">
-          <canvas id="chartType" role="img" aria-label="Répartition des signaux par type"></canvas>
-        </div>
-        <div id="legend-type" style="display:flex; flex-direction:column; gap:6px; margin-top:8px; font-size:14px; font-weight:600;"></div>
+      <div id="region-filter">
+        <div class="divider"></div>
+        <label for="region-select">Région</label>
+        <select id="region-select"></select>
       </div>
     </div>
 
-    <div class="card table-card">
-      <div class="card-title">Signaux par région</div>
-      <table id="table-regions"></table>
-      <div class="foot-note">Source : DHIS2</div>
-    </div>
-
-    <div id="favoris-mpox" style="display:none;"></div>
-
-    <div class="card table-card">
-      <div class="card-title">Evénement — surveillance SFE/SBC</div>
-      <div class="card-sub" id="table2-sub"></div>
-      <table id="table-events"></table>
-      <div class="foot-note">Source : DHIS2</div>
-    </div>
-
-    <div class="card table-card">
-      <div class="card-title">Performance de la surveillance — délais de traitement par région</div>
-      <div class="card-sub" id="table-delais-sub"></div>
-      <table id="table-delais"></table>
-      <div class="foot-note">Source : DHIS2 </div>
-    </div>
+    <div id="view-national"></div>
+    <div id="view-regional" style="display:none;"></div>
 
   </div>
 </div>
@@ -260,21 +218,148 @@ function evenementFinal(row) {
   return 'Autres / inclassifiables';
 }
 
+
+// ============================================================
+// CONNEXION PAR MOT DE PASSE (sans nom d'utilisateur)
+// ------------------------------------------------------------
+// Simple écran d'accès : il masque le tableau de bord mais ne
+// protège pas réellement les données (data/signals.json reste
+// accessible directement). On stocke l'empreinte SHA-256 du mot
+// de passe plutôt que le mot de passe lui-même.
+// Pour changer le mot de passe, ouvrez la console du navigateur
+// (F12) sur la page et tapez :  await sha256('nouveau-mot-de-passe')
+// puis collez le résultat ci-dessous.
+// ============================================================
+const PASSWORD_HASH = 'da6c60d58250f244e8e2d8158d685a375dd543bafbf004cea09a3f9604bcad53';
+const AUTH_KEY = 'sbc-auth';
+
+async function sha256(texte) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texte));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function ouvrirApp() {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  init();
+}
+
+async function tenterConnexion() {
+  const input = document.getElementById('login-pass');
+  const err = document.getElementById('login-error');
+  if (!input.value) { err.textContent = 'Saisissez le mot de passe.'; return; }
+  const h = await sha256(input.value);
+  if (h === PASSWORD_HASH) {
+    try { sessionStorage.setItem(AUTH_KEY, h); } catch (e) {}
+    ouvrirApp();
+  } else {
+    err.textContent = 'Mot de passe incorrect.';
+    input.select();
+  }
+}
+
+document.getElementById('login-btn').addEventListener('click', tenterConnexion);
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') tenterConnexion(); });
+
+// ============================================================
+// DEUX FEUILLES : vue nationale (unité = région) et vue
+// régionale (unité = district de santé, filtre par région,
+// Centre par défaut). Mêmes sections dans les deux vues.
+// ============================================================
+const VIEWS = {
+  national: { id: 'national', p: 'n-', regional: false, unitIdx: 2, unitLabel: 'Région' },
+  regional: { id: 'regional', p: 'r-', regional: true, unitIdx: 3, unitLabel: 'District' },
+};
+const REGION_DEFAUT = 'Centre';
+
 let RAW = [];
 let MIN_DATE, MAX_DATE, TODAY;
 let dateDebut, dateFin, preset = '7j';
-let chartDistricts, chartType;
+let vueActive = 'national';
+let regionChoisie = REGION_DEFAUT;
+const CHARTS = {};
+
+function kpiCard(id, color, desc, descId) {
+  return `<div class="kpi-card"><div class="kpi-bar" style="background:${color};"></div>
+    <div class="kpi-num" style="color:${color};" id="${id}">-</div>
+    <div class="kpi-desc"${descId ? ` id="${descId}"` : ''}>${desc}</div></div>`;
+}
+
+function kpiRow(p, k, cumul, v) {
+  const pre = cumul ? 'Cumul signaux' : 'Signaux';
+  const dernier = v.regional ? 'Aires de santé actives' : 'Régions ayant remonté des signaux';
+  return `<div class="kpi-row">
+    ${kpiCard(`${p}${k}-total`, '#008000', cumul ? 'Cumul signaux enregistrés' : 'Signaux enregistrés')}
+    ${kpiCard(`${p}${k}-actifs`, '#D6A700', `${pre} actifs`, `${p}${k}-actifs-sub`)}
+    ${kpiCard(`${p}${k}-completes`, '#008000', `${pre} traités`, `${p}${k}-completes-sub`)}
+    ${kpiCard(`${p}${k}-ds`, '#808080', 'Districts sanitaires actifs')}
+    ${kpiCard(`${p}${k}-last`, '#C62828', dernier)}
+  </div>`;
+}
+
+function sectionsHTML(v) {
+  const p = v.p;
+  const unite = v.regional ? 'district' : 'région';
+  return `
+    <div class="kpi-row-title" id="${p}kpi-title-cumul"></div>
+    ${kpiRow(p, 'kpiC', true, v)}
+    <div class="kpi-row-title" id="${p}kpi-title"></div>
+    ${kpiRow(p, 'kpiP', false, v)}
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">${v.regional ? 'Répartition des signaux par district' : 'Répartition des signaux par district (top 15)'}</div>
+        <div class="card-sub" id="${p}chart1-sub"></div>
+        <div style="position:relative; height:360px;">
+          <canvas id="${p}chartDistricts" role="img" aria-label="Répartition en pourcentage des signaux par district"></canvas>
+        </div>
+        <div class="legend-row" id="${p}legend-regions"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Type de signal</div>
+        <div class="card-sub" id="${p}chart2-sub"></div>
+        <div style="position:relative; height:230px;">
+          <canvas id="${p}chartType" role="img" aria-label="Répartition des signaux par type"></canvas>
+        </div>
+        <div id="${p}legend-type" style="display:flex; flex-direction:column; gap:6px; margin-top:8px; font-size:14px; font-weight:600;"></div>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <div class="card-title">Signaux par ${unite}</div>
+      <table id="${p}table-unites"></table>
+      <div class="foot-note">Source : DHIS2</div>
+    </div>
+
+    <div id="${p}favoris" style="display:none;"></div>
+
+    <div class="card table-card">
+      <div class="card-title">Evénement — surveillance SFE/SBC</div>
+      <div class="card-sub" id="${p}table2-sub"></div>
+      <table id="${p}table-events"></table>
+      <div class="foot-note">Source : DHIS2</div>
+    </div>
+
+    <div class="card table-card">
+      <div class="card-title">Performance de la surveillance — délais de traitement par ${unite}</div>
+      <div class="card-sub" id="${p}table-delais-sub"></div>
+      <table id="${p}table-delais"></table>
+      <div class="foot-note">Source : DHIS2 </div>
+    </div>`;
+}
+
+const $ = id => document.getElementById(id);
 
 async function init() {
   try {
     const res = await fetch('data/signals.json?t=' + Date.now());
     RAW = await res.json();
   } catch (e) {
-    document.getElementById('status').textContent = "Impossible de charger les données (data/signals.json). " + e.message;
+    $('status').textContent = "Impossible de charger les données (data/signals.json). " + e.message;
     return;
   }
   if (!RAW.length) {
-    document.getElementById('status').textContent = "Aucune donnée disponible pour le moment.";
+    $('status').textContent = "Aucune donnée disponible pour le moment.";
     return;
   }
   const dates = RAW.map(r => r[0]).filter(Boolean).sort();
@@ -283,22 +368,43 @@ async function init() {
   dateDebut = isoDaysAgo(TODAY, 6);
   dateFin = TODAY;
 
-  document.getElementById('date-debut').value = dateDebut;
-  document.getElementById('date-fin').value = dateFin;
-  document.getElementById('date-debut').min = MIN_DATE;
-  document.getElementById('date-fin').max = TODAY;
-  document.getElementById('header-sub').textContent =
+  $('view-national').innerHTML = sectionsHTML(VIEWS.national);
+  $('view-regional').innerHTML = sectionsHTML(VIEWS.regional);
+
+  const regions = Array.from(new Set(RAW.map(r => r[2]).filter(Boolean))).sort((a, b) => a.localeCompare(b, 'fr'));
+  if (!regions.includes(regionChoisie)) regionChoisie = regions[0];
+  $('region-select').innerHTML = regions.map(r => `<option value="${r}"${r === regionChoisie ? ' selected' : ''}>${r}</option>`).join('');
+  $('region-select').addEventListener('change', e => { regionChoisie = e.target.value; render(); });
+
+  $('date-debut').value = dateDebut;
+  $('date-fin').value = dateFin;
+  $('date-debut').min = MIN_DATE;
+  $('date-fin').max = TODAY;
+  $('header-sub').textContent =
     `${RAW.length.toLocaleString('fr-FR')} signaux au total · du ${fmtDate(MIN_DATE)} au ${fmtDate(MAX_DATE)}`;
 
   document.querySelectorAll('.preset-btn').forEach(btn => {
     btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
   });
-  document.getElementById('date-debut').addEventListener('change', e => { dateDebut = e.target.value; preset = 'perso'; setActivePreset(); render(); });
-  document.getElementById('date-fin').addEventListener('change', e => { dateFin = e.target.value; preset = 'perso'; setActivePreset(); render(); });
+  $('date-debut').addEventListener('change', e => { dateDebut = e.target.value; preset = 'perso'; setActivePreset(); render(); });
+  $('date-fin').addEventListener('change', e => { dateFin = e.target.value; preset = 'perso'; setActivePreset(); render(); });
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => changerVue(btn.dataset.view));
+  });
 
   setActivePreset();
-  document.getElementById('status').style.display = 'none';
-  document.getElementById('content').style.display = 'block';
+  $('status').style.display = 'none';
+  $('content').style.display = 'block';
+  render();
+}
+
+function changerVue(vue) {
+  vueActive = vue;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === vue));
+  $('view-national').style.display = vue === 'national' ? 'block' : 'none';
+  $('view-regional').style.display = vue === 'regional' ? 'block' : 'none';
+  $('region-filter').style.display = vue === 'regional' ? 'flex' : 'none';
   render();
 }
 
@@ -307,8 +413,8 @@ function applyPreset(p) {
   if (p === '7j') { dateDebut = isoDaysAgo(TODAY, 6); dateFin = TODAY; }
   else if (p === '30j') { dateDebut = isoDaysAgo(TODAY, 29); dateFin = TODAY; }
   else if (p === 'cumul') { dateDebut = MIN_DATE; dateFin = TODAY; }
-  document.getElementById('date-debut').value = dateDebut;
-  document.getElementById('date-fin').value = dateFin;
+  $('date-debut').value = dateDebut;
+  $('date-fin').value = dateFin;
   setActivePreset();
   render();
 }
@@ -319,69 +425,93 @@ function setActivePreset() {
   });
 }
 
+// On ne dessine que la feuille visible (Chart.js a besoin d'un
+// conteneur affiché pour calculer la taille des graphiques).
 function render() {
-  const periodRows = RAW.filter(r => r[0] && r[0] >= dateDebut && r[0] <= dateFin);
+  const v = VIEWS[vueActive];
+  const baseRows = v.regional ? RAW.filter(r => r[2] === regionChoisie) : RAW;
+  const periodRows = baseRows.filter(r => r[0] && r[0] >= dateDebut && r[0] <= dateFin);
   const labelPeriode = `${fmtDate(dateDebut)} au ${fmtDate(dateFin)}`;
+  const suffixe = v.regional ? ` — région ${regionChoisie}` : '';
 
-  renderKpis('kpiC', RAW, `Depuis le début de l'année ${MAX_DATE.slice(0,4)} (cumul, non filtré)`, 'kpi-periode-title-cumul');
-  renderKpis('kpiP', periodRows, `Sur la période sélectionnée : ${labelPeriode}`, 'kpi-periode-title');
+  renderKpis(v, 'kpiC', baseRows, `Depuis le début de l'année ${MAX_DATE.slice(0,4)} (cumul, non filtré)${suffixe}`, 'kpi-title-cumul');
+  renderKpis(v, 'kpiP', periodRows, `Sur la période sélectionnée : ${labelPeriode}${suffixe}`, 'kpi-title');
 
-  document.getElementById('chart1-sub').textContent = labelPeriode;
-  document.getElementById('chart2-sub').textContent = labelPeriode;
+  $(`${v.p}chart1-sub`).textContent = labelPeriode;
+  $(`${v.p}chart2-sub`).textContent = labelPeriode;
 
-  renderTableRegions(periodRows, labelPeriode);
-  renderFavoris(periodRows);
-  renderChartDistricts(periodRows);
-  renderChartType(periodRows);
-  renderTableEvents(periodRows, labelPeriode);
-  renderTableDelais(periodRows, labelPeriode);
+  renderTableUnites(v, periodRows, baseRows, labelPeriode);
+  renderFavoris(v, periodRows);
+  renderChartDistricts(v, periodRows);
+  renderChartType(v, periodRows);
+  renderTableEvents(v, periodRows, baseRows, labelPeriode);
+  renderTableDelais(v, periodRows, labelPeriode);
 }
 
-function renderKpis(prefix, rows, titleText, titleElId) {
+function renderKpis(v, k, rows, titleText, titleElId) {
+  const p = v.p;
   const total = rows.length;
   const actifs = rows.filter(r => r[1] === 'ACTIVE').length;
   const completes = rows.filter(r => r[1] === 'COMPLETED').length;
   const dsActifs = new Set(rows.map(r => `${r[2]}|${r[3]}`)).size;
-  const regionsActives = new Set(rows.map(r => r[2])).size;
   const pctActifs = total ? (actifs / total * 100).toFixed(0) : 0;
   const pctCompletes = total ? (completes / total * 100).toFixed(0) : 0;
 
-  const titleEl = document.getElementById(titleElId);
-  if (titleEl) titleEl.textContent = titleText;
-
-  document.getElementById(`${prefix}-total`).textContent = total.toLocaleString('fr-FR');
-  document.getElementById(`${prefix}-actifs`).textContent = actifs.toLocaleString('fr-FR');
-  document.getElementById(`${prefix}-actifs-sub`).textContent = `Signaux actifs (${pctActifs} %)`;
-  document.getElementById(`${prefix}-completes`).textContent = completes.toLocaleString('fr-FR');
-  document.getElementById(`${prefix}-completes-sub`).textContent = `Signaux traités (${pctCompletes} %)`;
-  document.getElementById(`${prefix}-ds`).textContent = dsActifs.toLocaleString('fr-FR');
-  document.getElementById(`${prefix}-regions`).textContent = `${regionsActives} / 10`;
+  $(`${p}${titleElId}`).textContent = titleText;
+  $(`${p}${k}-total`).textContent = total.toLocaleString('fr-FR');
+  $(`${p}${k}-actifs`).textContent = actifs.toLocaleString('fr-FR');
+  $(`${p}${k}-actifs-sub`).textContent = `Signaux actifs (${pctActifs} %)`;
+  $(`${p}${k}-completes`).textContent = completes.toLocaleString('fr-FR');
+  $(`${p}${k}-completes-sub`).textContent = `Signaux traités (${pctCompletes} %)`;
+  $(`${p}${k}-ds`).textContent = dsActifs.toLocaleString('fr-FR');
+  if (v.regional) {
+    $(`${p}${k}-last`).textContent = new Set(rows.map(r => `${r[3]}|${r[4]}`)).size.toLocaleString('fr-FR');
+  } else {
+    $(`${p}${k}-last`).textContent = `${new Set(rows.map(r => r[2])).size} / 10`;
+  }
 }
 
-function renderTableRegions(periodRows, labelPeriode) {
-  const byRegionPeriode = {}, byRegionCumul = {}, dsByRegionPeriode = {};
+// Vue nationale : une ligne par région (liste fixe des 10 régions),
+// dernière colonne = districts ayant capté des signaux.
+// Vue régionale : une ligne par district de la région, dernière
+// colonne = aires de santé ayant capté des signaux.
+function renderTableUnites(v, periodRows, cumulRows, labelPeriode) {
+  const ui = v.unitIdx, si = ui + 1;
+  const byPeriode = {}, byCumul = {}, subByPeriode = {};
   periodRows.forEach(r => {
-    byRegionPeriode[r[2]] = (byRegionPeriode[r[2]] || 0) + 1;
-    (dsByRegionPeriode[r[2]] = dsByRegionPeriode[r[2]] || new Set()).add(r[3]);
+    byPeriode[r[ui]] = (byPeriode[r[ui]] || 0) + 1;
+    (subByPeriode[r[ui]] = subByPeriode[r[ui]] || new Set()).add(r[si]);
   });
-  RAW.forEach(r => { byRegionCumul[r[2]] = (byRegionCumul[r[2]] || 0) + 1; });
+  cumulRows.forEach(r => { byCumul[r[ui]] = (byCumul[r[ui]] || 0) + 1; });
 
-  const rows = REGIONS_CM.map(({ region, abbr }) => ({
-    region: abbr,
-    periode: byRegionPeriode[region] || 0,
-    cumul: byRegionCumul[region] || 0,
-    observations: dsByRegionPeriode[region] ? Array.from(dsByRegionPeriode[region]).sort().join(', ') : '',
+  let unites;
+  if (v.regional) {
+    unites = Object.keys(byCumul).filter(Boolean).map(ds => ({ key: ds, label: ds }));
+    unites.sort((a, b) => (byPeriode[b.key] || 0) - (byPeriode[a.key] || 0)
+      || (byCumul[b.key] || 0) - (byCumul[a.key] || 0)
+      || a.label.localeCompare(b.label, 'fr'));
+  } else {
+    unites = REGIONS_CM.map(({ region, abbr }) => ({ key: region, label: abbr }));
+  }
+
+  const rows = unites.map(u => ({
+    label: u.label,
+    periode: byPeriode[u.key] || 0,
+    cumul: byCumul[u.key] || 0,
+    observations: subByPeriode[u.key] ? Array.from(subByPeriode[u.key]).filter(Boolean).sort().join(', ') : '',
   }));
-  const total = { region: 'Total', periode: rows.reduce((s,r)=>s+r.periode,0), cumul: rows.reduce((s,r)=>s+r.cumul,0), observations: '' };
+  const total = { label: 'Total', periode: rows.reduce((s,r)=>s+r.periode,0), cumul: rows.reduce((s,r)=>s+r.cumul,0), observations: '', isTotal: true };
   rows.push(total);
 
   const yr = MAX_DATE.slice(0,4);
+  const titre1 = v.regional ? 'Districts' : 'Régions';
+  const titreObs = v.regional ? 'AS ayant capté des signaux/cas communautaires' : 'DS ayant capté des signaux/cas communautaires';
   let html = `<thead>
     <tr>
-      <th rowspan="2" style="background:#008000;color:#fff;text-align:left;">Régions</th>
+      <th rowspan="2" style="background:#008000;color:#fff;text-align:left;">${titre1}</th>
       <th style="background:#A9D18E;color:#1F2937;text-align:center;">${labelPeriode}</th>
       <th style="background:#0A2E0A;text-align:center;">Cumul ${yr}</th>
-      <th rowspan="2" style="background:#008000;color:#fff;text-align:left;">DS ayant capté des signaux/cas communautaires, ${labelPeriode}</th>
+      <th rowspan="2" style="background:#008000;color:#fff;text-align:left;">${titreObs}, ${labelPeriode}</th>
     </tr>
     <tr>
       <th style="background:#008000;text-align:center;">DHIS2</th>
@@ -389,34 +519,29 @@ function renderTableRegions(periodRows, labelPeriode) {
     </tr>
   </thead><tbody>`;
   rows.forEach((r,i) => {
-    const isTotal = r.region === 'Total';
-    html += `<tr style="font-weight:${isTotal?800:600}; background:${i%2===0 && !isTotal ? '#FAFAF8':'#fff'};">
-      <td>${r.region}</td>
+    html += `<tr style="font-weight:${r.isTotal?800:600}; background:${i%2===0 && !r.isTotal ? '#FAFAF8':'#fff'};">
+      <td>${r.label}</td>
       <td style="text-align:center; font-weight:800;">${r.periode}</td>
       <td style="text-align:center; font-weight:800;">${r.cumul}</td>
       <td style="color:#374151; font-weight:500;">${r.observations}</td>
     </tr>`;
   });
   html += '</tbody>';
-  document.getElementById('table-regions').innerHTML = html;
+  $(`${v.p}table-unites`).innerHTML = html;
 }
 
-// Ajout : liste de vigilance textuelle, district (région) : n cas de <événement>,
-// pour tous les types d'évènements. Ne modifie aucune fonction existante.
-function renderFavoris(periodRows) {
-  const el = document.getElementById('favoris-mpox');
+// Liste de vigilance : district (région) : n évènements de <événement>.
+// En vue régionale, la région est implicite et n'est pas répétée.
+function renderFavoris(v, periodRows) {
+  const el = $(`${v.p}favoris`);
   if (!el) return;
 
-  // Même filtre que le tableau "Evénement — surveillance SFE/SBC" (isVerifie),
-  // pour que les deux sections comptent exactement les mêmes évènements sur
-  // la même période.
   const verifRows = periodRows.filter(r => isVerifie(r[7]));
-
   const counts = {};
   verifRows.forEach(r => {
     const ev = evenementFinal(r);
     if (ev === 'Autres / inclassifiables') return;
-    const key = `${r[3]}|${r[2]}|${ev}`; // district|région|évènement
+    const key = `${r[3]}|${r[2]}|${ev}`;
     counts[key] = (counts[key] || 0) + 1;
   });
 
@@ -430,28 +555,36 @@ function renderFavoris(periodRows) {
   el.style.display = 'block';
   const lines = entries.map(([key, n]) => {
     const [district, region, ev] = key.split('|');
-    return `<div class="favoris-line">${district} (${region}) : ${n} évènement${n>1?'s':''} de ${ev}</div>`;
+    const lieu = v.regional ? district : `${district} (${region})`;
+    return `<div class="favoris-line">${lieu} : ${n} évènement${n>1?'s':''} de ${ev}</div>`;
   }).join('');
   el.innerHTML = `<div class="favoris-title">À surveiller — évènements par district sur la période</div>
     <div class="favoris-columns">${lines}</div>`;
 }
 
-function renderChartDistricts(periodRows) {
+function renderChartDistricts(v, periodRows) {
   const counts = {};
   periodRows.forEach(r => { const key = `${r[2]}|${r[3]}`; counts[key] = (counts[key]||0)+1; });
   const total = periodRows.length || 1;
-  const data = Object.entries(counts).map(([key,n]) => {
+  let data = Object.entries(counts).map(([key,n]) => {
     const [region, ds] = key.split('|');
-    return { region, ds, label: `${region} - ${ds}`, n, pct: n/total*100 };
-  }).sort((a,b) => b.pct - a.pct).slice(0,15);
+    return { region, ds, label: v.regional ? ds : `${region} - ${ds}`, n, pct: n/total*100 };
+  }).sort((a,b) => b.pct - a.pct);
+  if (!v.regional) data = data.slice(0,15);
 
-  const usedRegions = new Set(data.map(d => d.region));
-  document.getElementById('legend-regions').innerHTML = Array.from(usedRegions).map(r =>
-    `<span><span class="legend-dot" style="background:${REGION_COLOR[r]||'#9CA3AF'}"></span>${r}</span>`
-  ).join('');
+  const legend = $(`${v.p}legend-regions`);
+  if (v.regional) {
+    legend.innerHTML = '';
+  } else {
+    const usedRegions = new Set(data.map(d => d.region));
+    legend.innerHTML = Array.from(usedRegions).map(r =>
+      `<span><span class="legend-dot" style="background:${REGION_COLOR[r]||'#9CA3AF'}"></span>${r}</span>`
+    ).join('');
+  }
 
-  if (chartDistricts) chartDistricts.destroy();
-  chartDistricts = new Chart(document.getElementById('chartDistricts'), {
+  const cle = `${v.p}districts`;
+  if (CHARTS[cle]) CHARTS[cle].destroy();
+  CHARTS[cle] = new Chart($(`${v.p}chartDistricts`), {
     type: 'bar',
     data: {
       labels: data.map(d => d.label),
@@ -463,29 +596,30 @@ function renderChartDistricts(periodRows) {
         label: ctx => `${data[ctx.dataIndex].n} signaux (${ctx.parsed.y.toFixed(1)}%)`
       } } },
       scales: {
-        x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 60, font: { size: 14, weight: 700 }, color: '#1F2937' } },
-        y: { ticks: { callback: v => v + '%', font: { size: 12, weight: 600 } } },
+        x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 60, font: { size: v.regional && data.length > 20 ? 12 : 14, weight: 700 }, color: '#1F2937' } },
+        y: { ticks: { callback: val => val + '%', font: { size: 12, weight: 600 } } },
       },
     },
   });
 }
 
-function renderChartType(periodRows) {
+function renderChartType(v, periodRows) {
   const counts = { Communautaires: 0, Hospitaliers: 0, "Centre d'appel": 0 };
   periodRows.forEach(r => { counts[typeSignal(r[5])]++; });
   const total = Object.values(counts).reduce((a,b)=>a+b,0) || 1;
   const colors = { Communautaires: '#0A2E0A', Hospitaliers: '#2E5EAA', "Centre d'appel": '#D97706' };
   const entries = Object.entries(counts).map(([name,value]) => ({ name, value, pct: value/total*100, color: colors[name] }));
 
-  document.getElementById('legend-type').innerHTML = entries.map(d =>
+  $(`${v.p}legend-type`).innerHTML = entries.map(d =>
     `<div style="display:flex; justify-content:space-between;">
       <span><span class="legend-dot" style="background:${d.color}"></span>${d.name}</span>
       <span style="font-weight:800;">${d.value} (${d.pct.toFixed(1)}%)</span>
     </div>`
   ).join('');
 
-  if (chartType) chartType.destroy();
-  chartType = new Chart(document.getElementById('chartType'), {
+  const cle = `${v.p}type`;
+  if (CHARTS[cle]) CHARTS[cle].destroy();
+  CHARTS[cle] = new Chart($(`${v.p}chartType`), {
     type: 'doughnut',
     data: { labels: entries.map(d=>d.name), datasets: [{ data: entries.map(d=>d.value), backgroundColor: entries.map(d=>d.color) }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false },
@@ -493,12 +627,10 @@ function renderChartType(periodRows) {
   });
 }
 
-function renderTableEvents(periodRows, labelPeriode) {
+function renderTableEvents(v, periodRows, cumulRows, labelPeriode) {
   const verifPeriode = periodRows.filter(r => isVerifie(r[7]));
-  const verifCumul = RAW.filter(r => isVerifie(r[7]));
+  const verifCumul = cumulRows.filter(r => isVerifie(r[7]));
 
-  // On ne garde que les signaux classés (on exclut "Autres / inclassifiables")
-  // et les pourcentages sont recalculés sur ce total classé uniquement.
   const classesPeriode = verifPeriode.filter(r => evenementFinal(r) !== 'Autres / inclassifiables');
   const classesCumul = verifCumul.filter(r => evenementFinal(r) !== 'Autres / inclassifiables');
 
@@ -509,7 +641,7 @@ function renderTableEvents(periodRows, labelPeriode) {
   events.sort((a,b) => (cCumul[b]||0) - (cCumul[a]||0));
 
   const totalPeriode = classesPeriode.length || 1, totalCumul = classesCumul.length || 1;
-  document.getElementById('table2-sub').textContent =
+  $(`${v.p}table2-sub`).textContent =
     `${classesPeriode.length} évènements classés sur la période · ${classesCumul.length} en cumul`;
 
   const yr = MAX_DATE.slice(0,4);
@@ -531,7 +663,7 @@ function renderTableEvents(periodRows, labelPeriode) {
     <td style="text-align:center;">${classesPeriode.length} (100%)</td>
     <td style="text-align:center;">${classesCumul.length} (100%)</td>
   </tr></tbody>`;
-  document.getElementById('table-events').innerHTML = html;
+  $(`${v.p}table-events`).innerHTML = html;
 }
 
 // ------------------------------------------------------------
@@ -576,16 +708,17 @@ function calculerIndicateurs(row) {
   return { notifie24h, verifie24h, investigue48h, transforme48h, evaluationRisque };
 }
 
-function renderTableDelais(periodRows, labelPeriode) {
-  const parRegion = {};
+
+function renderTableDelais(v, periodRows, labelPeriode) {
+  const parUnite = {};
   periodRows.forEach(r => {
-    const region = (r[2] || '').trim();
-    if (!region) return;
-    if (!parRegion[region]) parRegion[region] = {
+    const unite = (r[v.unitIdx] || '').trim();
+    if (!unite) return;
+    if (!parUnite[unite]) parUnite[unite] = {
       signaux: 0, notifies24h: 0, verifies24h: 0, investigues48h: 0, transformes48h: 0, evalues: 0,
     };
     const ind = calculerIndicateurs(r);
-    const s = parRegion[region];
+    const s = parUnite[unite];
     s.signaux++;
     if (ind.notifie24h) s.notifies24h++;
     if (ind.verifie24h) s.verifies24h++;
@@ -594,10 +727,10 @@ function renderTableDelais(periodRows, labelPeriode) {
     if (ind.evaluationRisque) s.evalues++;
   });
 
-  const regions = Object.keys(parRegion).sort();
+  const unites = Object.keys(parUnite).sort((a, b) => a.localeCompare(b, 'fr'));
   const total = { signaux: 0, notifies24h: 0, verifies24h: 0, investigues48h: 0, transformes48h: 0, evalues: 0 };
-  regions.forEach(r => {
-    const s = parRegion[r];
+  unites.forEach(u => {
+    const s = parUnite[u];
     total.signaux += s.signaux; total.notifies24h += s.notifies24h; total.verifies24h += s.verifies24h;
     total.investigues48h += s.investigues48h; total.transformes48h += s.transformes48h; total.evalues += s.evalues;
   });
@@ -606,7 +739,7 @@ function renderTableDelais(periodRows, labelPeriode) {
   const cell = (n, d) => `${n} (${pct(n, d)} %)`;
 
   let html = `<thead><tr>
-    <th style="background:#008000;text-align:left;">Région</th>
+    <th style="background:#008000;text-align:left;">${v.unitLabel}</th>
     <th style="background:#008000;text-align:center;">Nombre de signaux notifiés</th>
     <th style="background:#008000;text-align:center;">Nombre de signaux notifiés dans les 24h</th>
     <th style="background:#008000;text-align:center;">% de signaux vérifiés dans les 24h</th>
@@ -615,10 +748,10 @@ function renderTableDelais(periodRows, labelPeriode) {
     <th style="background:#008000;text-align:center;">% d'évènements ayant bénéficié d'une évaluation de risque</th>
   </tr></thead><tbody>`;
 
-  regions.forEach((r, i) => {
-    const s = parRegion[r];
+  unites.forEach((u, i) => {
+    const s = parUnite[u];
     html += `<tr style="background:${i % 2 === 0 ? '#FAFAF8' : '#fff'};">
-      <td style="font-weight:700;">${r}</td>
+      <td style="font-weight:700;">${u}</td>
       <td style="text-align:center; font-weight:700;">${s.signaux}</td>
       <td style="text-align:center; font-weight:700;">${s.notifies24h}</td>
       <td style="text-align:center; font-weight:700;">${cell(s.verifies24h, s.signaux)}</td>
@@ -638,11 +771,9 @@ function renderTableDelais(periodRows, labelPeriode) {
     <td style="text-align:center;">${cell(total.evalues, total.transformes48h)}</td>
   </tr></tbody>`;
 
-  document.getElementById('table-delais').innerHTML = html;
-  document.getElementById('table-delais-sub').textContent = labelPeriode;
+  $(`${v.p}table-delais`).innerHTML = html;
+  $(`${v.p}table-delais-sub`).textContent = labelPeriode;
 }
-
-init();
 </script>
 </body>
 </html>

@@ -1,8 +1,10 @@
-name: Actualisation quotidienne du dashboard SBC
+name: Actualisation hebdomadaire du dashboard SBC
 
 on:
   schedule:
-    - cron: '0 5 * * *'
+    # Chaque jeudi a 6h heure du Cameroun (5h UTC)
+    - cron: '0 5 * * 4'
+  # Relance manuelle possible a tout moment : onglet Actions > Run workflow
   workflow_dispatch: {}
 
 permissions:
